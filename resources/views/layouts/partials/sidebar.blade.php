@@ -34,6 +34,12 @@
                         <li class="submenu-item">
                             <a href="{{ route('products.index') }}" class="submenu-link">Product</a>
                         </li>
+                        <li class="submenu-item">
+                            <a href="{{ route('customers.index') }}" class="submenu-link">Customer</a>
+                        </li>
+                        <li class="submenu-item">
+                            <a href="{{ route('invoices.index') }}" class="submenu-link">Invoice</a>
+                        </li>
                     </ul>
                 </li>
                 @can('report_manage')

@@ -33,8 +33,8 @@ class ProductController extends Controller
        ]);
 
        Product::create($validatedData);
-       //return redirect()->route('products.index')->with('success', 'Product created successfully.');
-       return response()->json(['success' => true, 'message' => 'Product created successfully.']);
+       return redirect()->route('products.index')->with('success', 'Product created successfully.');
+       //return response()->json(['success' => true, 'message' => 'Product created successfully.']);
    }
 
    // Display the specified product

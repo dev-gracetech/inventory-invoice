@@ -113,11 +113,11 @@
                     </div>
                     <div class="mb-3">
                         <label for="buying_price" class="form-label">Buying Price</label>
-                        <input type="number" class="form-control" id="buying_price" name="buying_price" required>
+                        <input type="number" step="0.01" class="form-control" id="buying_price" name="buying_price" placeholder="0.00" required>
                     </div>
                     <div class="mb-3">
                         <label for="selling_price" class="form-label">Selling Price</label>
-                        <input type="number" class="form-control" id="selling_price" name="selling_price" required>
+                        <input type="number" step="0.01" class="form-control" id="selling_price" name="selling_price" placeholder="0.00" required>
                     </div>
                     <div class="mb-3">
                         <label for="quantity" class="form-label">Stock</label>
@@ -144,11 +144,11 @@
                     @method('PUT')
                     <div class="mb-3">
                         <label for="name" class="form-label">Product Name</label>
-                        <input type="text" class="form-control" id="name" name="name" value="{{ $product->name }}">
+                        <input type="text" class="form-control" id="name" name="name">
                     </div>
                     <div class="mb-3">
                         <label for="description" class="form-label">Description</label>
-                        <textarea class="form-control" id="description" name="description">{{ $product->description }}</textarea>
+                        <textarea class="form-control" id="description" name="description"></textarea>
                     </div>
                     <div class="mb-3">
                         <label for="category" class="form-label">Category</label>
@@ -157,19 +157,19 @@
                             <option value="{{ $category->id }}" {{ $product->category_id == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
                             @endforeach
                         </select> --}}
-                        <input type="text" class="form-control" id="category" name="category" value="{{ $product->category }}">
+                        <input type="text" class="form-control" id="category" name="category">
                     </div>
                     <div class="mb-3">
                         <label for="buying_price" class="form-label">Buying Price</label>
-                        <input type="number" class="form-control" id="buying_price" name="price" value="{{ $product->buying_price }}">
+                        <input type="number" step="0.01" class="form-control" id="buying_price" name="price">
                     </div>
                     <div class="mb-3">
                         <label for="selling_price" class="form-label">Selling Price</label>
-                        <input type="number" class="form-control" id="selling_price" name="selling_price" value="{{ $product->selling_price }}">
+                        <input type="number" step="0.01" class="form-control" id="selling_price" name="selling_price">
                     </div>
                     <div class="mb-3">
                         <label for="quantity" class="form-label">Stock</label>
-                        <input type="number" class="form-control" id="quantity" name="quantity" value="{{ $product->quantity }}">
+                        <input type="number" class="form-control" id="quantity" name="quantity">
                     </div>
                     <button type="submit" class="btn btn-primary">Update Product</button>
                 </form>
@@ -177,14 +177,14 @@
         </div>
     </div>
 </div>
-<div class="modal fade" id="deleteProductModal{{ $product->id }}" tabindex="-1" aria-labelledby="deleteProductModal{{ $product->id }}Label" aria-hidden="true">
+<div class="modal fade" id="deleteProductModal" tabindex="-1" aria-labelledby="deleteProductModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="deleteProductModal{{ $product->id }}Label">Delete Product</h5>
+                <h5 class="modal-title" id="deleteProductModalLabel">Delete Product</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body" id="deleteProductModal{{ $product->id }}">
+            <div class="modal-body" id="deleteProductModal">
                 <p>Are you sure you want to delete this product?</p>
                 <form method="POST">
                     @csrf
@@ -220,130 +220,87 @@
 @endsection
 
 @section('custom-scripts')
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-
-        const imageUploadModal = document.getElementById('imageUploadModal');
-        const imageUploadForm = document.getElementById('imageUploadForm');
-        let stockId;
-        // Open the modal and set the stock ID
-        document.querySelectorAll('.upload-image-btn').forEach(button => {
-            button.addEventListener('click', function () {
-                stockId = this.getAttribute('data-stock-id');
-                imageUploadModal.style.display = 'block';
-                new bootstrap.Modal(imageUploadModal).show();
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const imageUploadModal = document.getElementById('imageUploadModal');
+            const imageUploadForm = document.getElementById('imageUploadForm');
+            let stockId;
+            // Open the modal and set the stock ID
+            document.querySelectorAll('.upload-image-btn').forEach(button => {
+                button.addEventListener('click', function () {
+                    stockId = this.getAttribute('data-stock-id');
+                    imageUploadModal.style.display = 'block';
+                    new bootstrap.Modal(imageUploadModal).show();
+                });
             });
-        });
-        // Handle form submission
-        imageUploadForm.addEventListener('submit', function (e) {
-            e.preventDefault();
+            // Handle form submission
+            imageUploadForm.addEventListener('submit', function (e) {
+                e.preventDefault();
 
-            const formData = new FormData(this);
-            formData.append('_token', '{{ csrf_token() }}');
+                const formData = new FormData(this);
+                formData.append('_token', '{{ csrf_token() }}');
 
-            fetch(`/stocks/${stockId}/upload-image`, {
-                method: 'POST',
-                body: formData,
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    alert('Image uploaded successfully.');
-                    window.location.reload();
-                } else {
-                    alert('Failed to upload image.');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
-        });
-
-        $('#createProductModal').on('hidden.bs.modal', function () {
-            $(this).find('form').trigger('reset');
-        });
-
-        $('#editProductModal').on('hidden.bs.modal', function () {
-            $(this).find('form').trigger('reset');
-        });
-
-        $('#deleteProductModal').on('hidden.bs.modal', function () {
-            $(this).find('form').trigger('reset');
-        });
-
-        document.querySelectorAll('.edit-product').forEach(button => {
-            button.addEventListener('click', function () {
-                const productId = this.getAttribute('data-id');
-                fetch(`/products/${productId}/edit`)
+                fetch(`/stocks/${stockId}/upload-image`, {
+                    method: 'POST',
+                    body: formData,
+                })
                 .then(response => response.json())
                 .then(data => {
-                    const modal = new bootstrap.Modal(document.getElementById('editProductModal'));
-                    const form = document.querySelector('#editProductModal form');
-                    form.action = `/products/${productId}`;
-                    form.querySelector('#name').value = data.name;
-                    form.querySelector('#description').value = data.description;
-                    form.querySelector('#category').value = data.category;
-                    form.querySelector('#buying_price').value = data.buying_price;
-                    form.querySelector('#selling_price').value = data.selling_price;
-                    form.querySelector('#quantity').value = data.quantity;
-                    modal.show();
+                    if (data.success) {
+                        alert('Image uploaded successfully.');
+                        window.location.reload();
+                    } else {
+                        alert('Failed to upload image.');
+                    }
                 })
                 .catch(error => {
                     console.error('Error:', error);
                 });
-        });
-
-        //submit edit product form
-        document.querySelector('#editProductModal form').addEventListener('submit', function (e) {
-            e.preventDefault();
-            const form = e.target;
-            const formData = new FormData(form);
-            formData.append('_method', 'PUT');
-            //formData.append('_token', '{{ csrf_token() }}');
-            fetch(`/products/${productId}`, {
-                method: 'POST',
-                body: formData,
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    Swal.fire({
-                        icon: 'success',
-                        title: data.message,
-                        showConfirmButton: false,
-                        timer: 1500
-                    });
-                    window.location.reload();
-                } else {
-                    Swal.fire({
-                        title: 'Error!',
-                        text: 'Failed to update product.',
-                        icon: 'error',
-                        confirmButtonText: 'OK'
-                    });
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
             });
-        });
 
-
-        document.querySelectorAll('.delete-product').forEach(button => {
-            button.addEventListener('click', function () {
-                const productId = this.getAttribute('data-id');
-                const modal = new bootstrap.Modal(document.getElementById(`deleteProductModal${productId}`));
-                modal.show();
+            $('#createProductModal').on('hidden.bs.modal', function () {
+                $(this).find('form').trigger('reset');
             });
-        });
 
-        //submit delete product form
-        document.querySelectorAll('#deleteProductModal form').forEach(form => {
-            form.addEventListener('submit', function (e) {
+            $('#editProductModal').on('hidden.bs.modal', function () {
+                $(this).find('form').trigger('reset');
+            });
+
+            $('#deleteProductModal').on('hidden.bs.modal', function () {
+                $(this).find('form').trigger('reset');
+            });
+
+            document.querySelectorAll('.edit-product').forEach(button => {
+                button.addEventListener('click', function () {
+                    const productId = this.getAttribute('data-id');
+                    fetch(`/products/${productId}/edit`)
+                    .then(response => response.json())
+                    .then(data => {
+                        const modal = new bootstrap.Modal(document.getElementById('editProductModal'));
+                        const form = document.querySelector('#editProductModal form');
+                        form.action = `/products/${productId}`;
+                        form.querySelector('#name').value = data.name;
+                        form.querySelector('#description').value = data.description;
+                        form.querySelector('#category').value = data.category;
+                        form.querySelector('#buying_price').value = data.buying_price;
+                        form.querySelector('#selling_price').value = data.selling_price;
+                        form.querySelector('#quantity').value = data.quantity;
+                        modal.show();
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+                });
+            });
+
+            //submit edit product form
+            document.querySelector('#editProductModal form').addEventListener('submit', function (e) {
                 e.preventDefault();
-                const formData = new FormData(this);
-                formData.append('_token', '{{ csrf_token() }}');
-                fetch(this.action, {
+                const form = e.target;
+                const formData = new FormData(form);
+                formData.append('_method', 'PUT');
+                //formData.append('_token', '{{ csrf_token() }}');
+                fetch(`/products/${productId}`, {
                     method: 'POST',
                     body: formData,
                 })
@@ -360,7 +317,7 @@
                     } else {
                         Swal.fire({
                             title: 'Error!',
-                            text: 'Failed to delete product.',
+                            text: 'Failed to update product.',
                             icon: 'error',
                             confirmButtonText: 'OK'
                         });
@@ -370,8 +327,50 @@
                     console.error('Error:', error);
                 });
             });
-        });
 
-    });
-</script>
+
+            document.querySelectorAll('.delete-product').forEach(button => {
+                button.addEventListener('click', function () {
+                    const productId = this.getAttribute('data-id');
+                    const modal = new bootstrap.Modal(document.getElementById(`deleteProductModal${productId}`));
+                    modal.show();
+                });
+            });
+
+            //submit delete product form
+            document.querySelectorAll('#deleteProductModal form').forEach(form => {
+                form.addEventListener('submit', function (e) {
+                    e.preventDefault();
+                    const formData = new FormData(this);
+                    formData.append('_token', '{{ csrf_token() }}');
+                    fetch(this.action, {
+                        method: 'POST',
+                        body: formData,
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: data.message,
+                                showConfirmButton: false,
+                                timer: 1500
+                            });
+                            window.location.reload();
+                        } else {
+                            Swal.fire({
+                                title: 'Error!',
+                                text: 'Failed to delete product.',
+                                icon: 'error',
+                                confirmButtonText: 'OK'
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+                });
+            });
+        });
+    </script>
 @endsection

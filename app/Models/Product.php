@@ -27,4 +27,12 @@ class Product extends Model
         }
         return asset('images/default_stock_image.png'); // Path to the default image
     }
+
+    // Relationship with invoices
+    public function invoices()
+    {
+        return $this->belongsToMany(Invoice::class, 'invoice_items')
+                    ->withPivot('quantity', 'unit_price', 'total_price')
+                    ->withTimestamps();
+    }
 }

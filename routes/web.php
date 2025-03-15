@@ -18,6 +18,9 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\InvoiceController;
+use App\Http\Controllers\ReceiptController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -51,4 +54,11 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/profile', [ProfileController::class, 'update'])->name('profile.update');
 
     Route::resource('products', ProductController::class);
+    Route::resource('customers', CustomerController::class);
+
+    Route::resource('invoices', InvoiceController::class);
+    Route::resource('receipts', ReceiptController::class);
+    Route::get('receipts/create/{invoice}', [ReceiptController::class, 'create_receipt'])->name('receipts.create-receipt');
+    Route::post('/invoices/{invoice}/mark-as-paid', [InvoiceController::class, 'markAsPaid'])->name('invoices.mark-as-paid');
+
 });
