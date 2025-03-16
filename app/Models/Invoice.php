@@ -25,17 +25,22 @@ class Invoice extends Model
         return $this->belongsTo(Customer::class);
     }
 
+    // Relationship with products
+    public function products()
+    {
+        return $this->belongsToMany(Product::class, 'invoice_items')
+                    ->withPivot('quantity', 'unit_price', 'total_price')
+                    ->withTimestamps();
+    }
+
     // Relationship to Receipts
     public function receipts()
     {
         return $this->hasMany(Receipt::class);
     }
 
-     // Relationship with products
-     public function products()
-     {
-         return $this->belongsToMany(Product::class, 'invoice_items')
-                     ->withPivot('quantity', 'unit_price', 'total_price')
-                     ->withTimestamps();
-     }
+    public function refunds()
+    {
+        return $this->hasMany(Refund::class);
+    }
 }

@@ -16,7 +16,7 @@ class ReceiptController extends Controller
             return redirect()->route('invoices.show', $invoice->id)
                              ->with('error', 'Cannot create a receipt for a fully paid invoice.');
         }
-        return view('receipts.create', compact('invoice'));
+        return view('invoices.receipt', compact('invoice'));
     }
 
     // Store a newly created receipt
@@ -32,22 +32,17 @@ class ReceiptController extends Controller
 
         $validatedData = $request->validate([
             'invoice_id' => 'required|exists:invoices,id',
-            'amount_paid' => [
-                'required',
-                'numeric',
-                function ($attribute, $value, $fail) use ($invoice) {
-                    $remainingBalance = $invoice->remaining_balance;
-                    if ($value > $remainingBalance) {
-                        $fail("The amount paid cannot exceed the remaining balance ($remainingBalance).");
-                    }
-                },
-            ],
+            'amount_paid' => 'required|numeric',
             'payment_date' => 'required|date',
             'payment_method' => 'required|string',
             'reference_number' => 'nullable|string',
             'notes' => 'nullable|string',
         ]);
         
+        if ($invoice->remaining_balance > $request->amount_paid) {
+            return redirect()->route('invoices.show', $invoice->id)
+                             ->with('error', 'The amount paid cannot exceed the remaining balance.');
+        }
         // Create the receipt
         $receipt = Receipt::create([
             'invoice_id' => $validatedData['invoice_id'],

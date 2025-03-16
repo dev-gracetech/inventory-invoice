@@ -21,6 +21,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\ReceiptController;
+use App\Http\Controllers\RefundController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -60,5 +61,9 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('receipts', ReceiptController::class);
     Route::get('receipts/create/{invoice}', [ReceiptController::class, 'create_receipt'])->name('receipts.create-receipt');
     Route::post('/invoices/{invoice}/mark-as-paid', [InvoiceController::class, 'markAsPaid'])->name('invoices.mark-as-paid');
+
+    //Route::resource('refunds', RefundController::class);
+    Route::get('refunds/create/{invoice}', [RefundController::class, 'create_refund'])->name('refunds.create-refund');
+    Route::post('refunds/store/{invoice}', [RefundController::class, 'store'])->name('refunds.store');
 
 });

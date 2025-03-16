@@ -46,6 +46,8 @@ class InvoiceController extends Controller
             'total_amount' => $validatedData['total_amount'], // Use the total amount from the form
         ]);
 
+        $invoice->update(['remaining_balance' => $invoice->total_amount]);
+        
         // Attach products to the invoice
         foreach ($validatedData['products'] as $index => $productId) {
             $product = Product::findOrFail($productId);
