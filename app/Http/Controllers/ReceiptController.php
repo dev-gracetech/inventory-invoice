@@ -39,7 +39,7 @@ class ReceiptController extends Controller
             'notes' => 'nullable|string',
         ]);
         
-        if ($invoice->remaining_balance > $request->amount_paid) {
+        if ($invoice->remaining_balance < $request->amount_paid) {
             return redirect()->route('invoices.show', $invoice->id)
                              ->with('error', 'The amount paid cannot exceed the remaining balance.');
         }

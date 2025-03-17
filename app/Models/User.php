@@ -8,10 +8,11 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
+use App\Traits\Auditable;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable, HasRoles;
+    use HasApiTokens, HasFactory, Notifiable, HasRoles, Auditable;
 
     /**
      * The attributes that are mass assignable.
@@ -46,4 +47,9 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
+    // Relationship with audit logs
+    public function auditLogs()
+    {
+        return $this->hasMany(AuditLog::class);
+    }
 }

@@ -2,6 +2,21 @@
 
 @section('content')
 <div class="page-title">
+    @if(session('success'))
+    <div class="d-flex justify-content-end">
+        <div class="col-2 alert alert-success alert-dismissible fade show" role="alert">
+            {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    </div>
+    @endif
+
+    @if(session('error'))
+        <div class="col-2 alert alert-danger alert-dismissible fade show" role="alert">
+            {{ session('error') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
     <div class="row">
         <div class="col-12 col-md-6 order-md-1 order-last">
             <h3>Invoice Details</h3>
@@ -20,6 +35,7 @@
                     <p><strong>Due Date:</strong> {{ $invoice->due_date }}</p>
                     <p><strong>Total Amount:</strong> ${{ number_format($invoice->total_amount, 2) }}</p>
                     <p><strong>Amount Paid:</strong> ${{ number_format($invoice->receipts->sum('amount_paid'), 2) }}</p>
+                    <p><strong>Amount Refunded:</strong> ${{ number_format($invoice->refunds->sum('amount_refunded'), 2) }}</p>
                     <p><strong>Amount Due:</strong> ${{ number_format($invoice->remaining_balance, 2) }}</p>
                     <p><strong>Status:</strong> {{ ucfirst($invoice->status) }}</p>
                 </div>
@@ -113,7 +129,7 @@
                         This invoice is fully paid. No further receipts can be created.
                     </div>
                 @endif
-                <a href="{{ route('invoices.index') }}" class="btn btn-secondary">Back</a>
+                <a href="{{ route('invoices.index') }}" class="btn btn-primary">Back</a>
                 
             </div>
         </div>

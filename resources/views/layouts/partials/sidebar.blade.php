@@ -38,6 +38,9 @@
                             <a href="{{ route('customers.index') }}" class="submenu-link">Customer</a>
                         </li>
                         <li class="submenu-item">
+                            <a href="{{ route('quotations.index') }}" class="submenu-link">Quotation</a>
+                        </li>
+                        <li class="submenu-item">
                             <a href="{{ route('invoices.index') }}" class="submenu-link">Invoice</a>
                         </li>
                     </ul>

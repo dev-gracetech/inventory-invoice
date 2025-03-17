@@ -50,4 +50,22 @@ class CustomerController extends Controller
         $customer->delete();
         return redirect()->route('customers.index')->with('success', 'Customer deleted successfully.');
     }
+
+    public function show_statement(Customer $customer)
+    {
+        // Fetch all invoices for the customer
+        $invoices = $customer->invoices()->with(['receipts', 'refunds'])->get();
+
+        // Calculate summary
+        $totalInvoiced = $invoices->sum('total_amount');
+        $totalPaid = $invoices->sum(function ($invoice) {
+            return $invoice->receipts->sum('amount_paid');
+        });
+        $totalRefunded = $invoices->sum(function ($invoice) {
+            return $invoice->refunds->sum('amount_refunded');
+        });
+        $outstandingBalance = $totalInvoiced - $totalPaid + $totalRefunded;
+
+        return view('customers.statement', compact('customer', 'invoices', 'totalInvoiced', 'totalPaid', 'totalRefunded', 'outstandingBalance'));
+    }
 }

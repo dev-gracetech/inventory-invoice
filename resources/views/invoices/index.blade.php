@@ -42,6 +42,8 @@
                                 <td>
                                     @if($invoice->status == 'paid')
                                     <span class="badge bg-success">Paid</span>
+                                    @elseif ($invoice->status == 'partially_paid')
+                                    <span class="badge bg-warning">Partially Paid</span>
                                     @else
                                     <span class="badge bg-danger">Unpaid</span>
                                     @endif

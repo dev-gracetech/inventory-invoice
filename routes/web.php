@@ -22,6 +22,7 @@ use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\ReceiptController;
 use App\Http\Controllers\RefundController;
+use App\Http\Controllers\QuotationController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -56,6 +57,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::resource('products', ProductController::class);
     Route::resource('customers', CustomerController::class);
+    Route::get('customers/{customer}/statement', [CustomerController::class, 'show_statement'])->name('customers.statement');
 
     Route::resource('invoices', InvoiceController::class);
     Route::resource('receipts', ReceiptController::class);
@@ -66,4 +68,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('refunds/create/{invoice}', [RefundController::class, 'create_refund'])->name('refunds.create-refund');
     Route::post('refunds/store/{invoice}', [RefundController::class, 'store'])->name('refunds.store');
 
+    Route::resource('quotations', QuotationController::class);
+    Route::post('/quotations/{quotation}/convert-to-invoice', [QuotationController::class, 'convertToInvoice'])
+     ->name('quotations.convert-to-invoice');
 });

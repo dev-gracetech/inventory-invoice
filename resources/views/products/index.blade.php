@@ -1,4 +1,5 @@
 @extends('layouts.layout')
+
 @section('custom-styles')
 <style>
     /* Base image size */
@@ -16,6 +17,7 @@
     }
 </style>
 @endsection
+
 @section('content')
 <div class="page-title">
     <div class="row">
@@ -54,7 +56,7 @@
                             <tr>
                                 <td>
                                     {{-- <button class="btn btn-info btn-sm upload-image-btn" data-stock-id="{{ $stock->id }}">Upload Image</button> --}}
-                                    <a href="#" class="upload-image-btn" data-stock-id="{{ $product->id }}">
+                                    <a href="#" class="upload-image-btn" data-product-id="{{ $product->id }}">
                                         <img src="{{ $product->ImageUrl }}" alt="{{ $product->name }}" width="50" height="50" class="product-image">
                                     </a>
                                 </td>
@@ -177,6 +179,7 @@
         </div>
     </div>
 </div>
+
 <div class="modal fade" id="deleteProductModal" tabindex="-1" aria-labelledby="deleteProductModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -195,7 +198,6 @@
         </div>
     </div>
 </div>
-
 
 <!-- Image Upload Modal -->
 <div class="modal fade" id="imageUploadModal" tabindex="-1" aria-labelledby="imageUploadModalLabel" aria-hidden="true">
@@ -224,11 +226,11 @@
         document.addEventListener('DOMContentLoaded', function () {
             const imageUploadModal = document.getElementById('imageUploadModal');
             const imageUploadForm = document.getElementById('imageUploadForm');
-            let stockId;
+            let productId;
             // Open the modal and set the stock ID
             document.querySelectorAll('.upload-image-btn').forEach(button => {
                 button.addEventListener('click', function () {
-                    stockId = this.getAttribute('data-stock-id');
+                    productId = this.getAttribute('data-product-id');
                     imageUploadModal.style.display = 'block';
                     new bootstrap.Modal(imageUploadModal).show();
                 });
@@ -240,7 +242,7 @@
                 const formData = new FormData(this);
                 formData.append('_token', '{{ csrf_token() }}');
 
-                fetch(`/stocks/${stockId}/upload-image`, {
+                fetch(`/products/${productId}/upload-image`, {
                     method: 'POST',
                     body: formData,
                 })
@@ -279,12 +281,12 @@
                         const modal = new bootstrap.Modal(document.getElementById('editProductModal'));
                         const form = document.querySelector('#editProductModal form');
                         form.action = `/products/${productId}`;
-                        form.querySelector('#name').value = data.name;
-                        form.querySelector('#description').value = data.description;
-                        form.querySelector('#category').value = data.category;
-                        form.querySelector('#buying_price').value = data.buying_price;
-                        form.querySelector('#selling_price').value = data.selling_price;
-                        form.querySelector('#quantity').value = data.quantity;
+                        form.querySelector('#name').value = data.product.name;
+                        form.querySelector('#description').value = data.product.description;
+                        form.querySelector('#category').value = data.product.category;
+                        form.querySelector('#buying_price').value = data.product.buying_price;
+                        form.querySelector('#selling_price').value = data.product.selling_price;
+                        form.querySelector('#quantity').value = data.product.quantity;
                         modal.show();
                     })
                     .catch(error => {

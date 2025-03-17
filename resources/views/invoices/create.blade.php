@@ -76,6 +76,7 @@
                         <input type="number" step="0.01" class="form-control" id="total_amount" name="total_amount" readonly>
                     </div>
                     <button type="submit" class="btn btn-primary">Create Invoice</button>
+                    <a href="{{ route('invoices.index') }}" class="btn btn-primary">Back</a>
                 </form>
             </div>
         </div>

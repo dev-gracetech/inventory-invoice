@@ -41,6 +41,9 @@
                                 <td>{{ $customer->phone }}</td>
                                 <td>{{ $customer->address }}</td>
                                 <td>
+                                    <a href="{{ route('customers.statement', $customer->id) }}" class="btn btn-info btn-sm" title="View Statement">
+                                        <i class="bi bi-file-text"></i>
+                                    </a>
                                     <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editCustomerModal{{ $customer->id }}"
                                         title="Edit">
                                         <i class="bi bi-pencil"></i>
