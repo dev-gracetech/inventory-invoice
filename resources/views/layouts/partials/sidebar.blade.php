@@ -20,7 +20,7 @@
                 <li class="sidebar-title">Menu</li>
 
                 <li class="sidebar-item">
-                    <a href="#" class='sidebar-link'>
+                    <a href="{{ route('dashboard') }}" class='sidebar-link'>
                         <i class="bi bi-clipboard-data"></i>
                         <span>Dashboard</span>
                     </a>
@@ -36,6 +36,12 @@
                         </li>
                         <li class="submenu-item">
                             <a href="{{ route('customers.index') }}" class="submenu-link">Customer</a>
+                        </li>
+                        <li class="submenu-item">
+                            <a href="{{ route('suppliers.index') }}" class="submenu-link">Supplier</a>
+                        </li>
+                        <li class="submenu-item">
+                            <a href="{{ route('purchase-orders.index') }}" class="submenu-link">Purchase Order</a>
                         </li>
                         <li class="submenu-item">
                             <a href="{{ route('quotations.index') }}" class="submenu-link">Quotation</a>

@@ -23,9 +23,12 @@ use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\ReceiptController;
 use App\Http\Controllers\RefundController;
 use App\Http\Controllers\QuotationController;
+use App\Http\Controllers\SupplierController;
+use App\Http\Controllers\PurchaseOrderController;
+use App\Http\Controllers\DashboardController;
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('login');
 });
 
 Auth::routes();
@@ -55,6 +58,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
     Route::post('/profile', [ProfileController::class, 'update'])->name('profile.update');
 
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
     Route::resource('products', ProductController::class);
     Route::resource('customers', CustomerController::class);
     Route::get('customers/{customer}/statement', [CustomerController::class, 'show_statement'])->name('customers.statement');
@@ -71,4 +76,12 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('quotations', QuotationController::class);
     Route::post('/quotations/{quotation}/convert-to-invoice', [QuotationController::class, 'convertToInvoice'])
      ->name('quotations.convert-to-invoice');
+
+     Route::resource('suppliers', SupplierController::class);
+
+     Route::resource('purchase-orders', PurchaseOrderController::class);
+     Route::post('/purchase-orders/{purchaseOrder}/send', [PurchaseOrderController::class, 'send'])
+          ->name('purchase-orders.send');
+     Route::post('/purchase-orders/{purchaseOrder}/receive', [PurchaseOrderController::class, 'receive'])
+          ->name('purchase-orders.receive'); 
 });
