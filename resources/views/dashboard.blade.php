@@ -83,7 +83,7 @@
                             <div class="card-header">
                                 <h5 class="card-title">Recent Invoices</h5>
                             </div>
-                            <div class="card-body mt-3">
+                            <div class="card-body mt-3 table-responsive">
                                 <table class="table table-bordered">
                                     <thead>
                                         <tr>
@@ -112,7 +112,7 @@
                             <div class="card-header">
                                 <h5 class="card-title">Recent Quotations</h5>
                             </div>
-                            <div class="card-body mt-3">
+                            <div class="card-body mt-3 table-responsive">
                                 <table class="table table-bordered">
                                     <thead>
                                         <tr>
